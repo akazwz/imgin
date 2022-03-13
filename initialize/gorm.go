@@ -1,11 +1,13 @@
 package initialize
 
 import (
+	"database/sql"
 	"fmt"
-	"github.com/akazwz/imgin/global"
 	"log"
 	"os"
 
+	"github.com/akazwz/imgin/global"
+	"github.com/akazwz/imgin/model"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -15,6 +17,14 @@ func InitGormDB() {
 	if global.GORMDB == nil {
 		log.Fatalln("数据库初始化失败")
 	}
+	CreateTables(global.GORMDB)
+	db, _ := global.GORMDB.DB()
+	defer func(db *sql.DB) {
+		err := db.Close()
+		if err != nil {
+
+		}
+	}(db)
 }
 
 // InitMySql 初始化 MySql
@@ -38,5 +48,18 @@ func InitMySql() *gorm.DB {
 		//sqlDB.SetMaxIdleConns()
 		//sqlDB.SetMaxIdleConns()
 		return db
+	}
+}
+
+// CreateTables 数据库表迁移
+func CreateTables(db *gorm.DB) {
+	err := db.AutoMigrate(
+		model.User{},
+		model.Image{},
+		model.Album{},
+		model.ImageURI{},
+	)
+	if err != nil {
+		log.Fatalln("数据库迁移失败")
 	}
 }
