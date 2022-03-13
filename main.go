@@ -29,8 +29,10 @@ func main() {
 		port = "9000"
 	}
 
+	addr := "0.0.0.0:" + port
+
 	s := &http.Server{
-		Addr:    ":" + port,
+		Addr:    addr,
 		Handler: routers,
 	}
 
