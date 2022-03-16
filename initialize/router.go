@@ -37,11 +37,11 @@ func Routers() *gin.Engine {
 		})
 	})
 
+	/* 公共路由 */
 	publicRouterV1 := r.Group("v1")
-
 	{
-		/* public 路由 */
-		router.InitPublicRouter(publicRouterV1)
+		router.InitBaseRouter(publicRouterV1)
+		router.InitCloudRouter(publicRouterV1)
 	}
 
 	privateGroupV1 := r.Group("v1")

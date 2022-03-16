@@ -10,15 +10,19 @@ import (
 	"github.com/qiniu/go-sdk/v7/storage"
 )
 
-// GetUploadFileToken 获取文件上传token(qiniu)
-func GetUploadFileToken(c *gin.Context) {
+// GetUploadToken 获取文件上传token(qiniu)
+func GetUploadToken(c *gin.Context) {
 	accessKey := os.Getenv("QINIU_ACCESS_KEY")
 	secretKey := os.Getenv("QINIU_SECRET_KEY")
 
 	mac := qbox.NewMac(accessKey, secretKey)
 	bucket := "akazwz"
+	/* 上传策略： 只能上传图片，最大为 10MB,检测内容 mime type */
 	putPolicy := storage.PutPolicy{
-		Scope: bucket,
+		Scope:      bucket,
+		MimeLimit:  "image/*",
+		FsizeLimit: 1024 * 1024 * 10,
+		DetectMime: 1,
 	}
 	upToken := putPolicy.UploadToken(mac)
 

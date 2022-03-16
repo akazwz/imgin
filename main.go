@@ -7,6 +7,7 @@ import (
 
 	"github.com/akazwz/imgin/initialize"
 	"github.com/joho/godotenv"
+	gonanoid "github.com/matoous/go-nanoid/v2"
 )
 
 func main() {
@@ -35,6 +36,12 @@ func main() {
 		Addr:    addr,
 		Handler: routers,
 	}
+
+	id, err := gonanoid.New(7)
+	if err != nil {
+		log.Println(err)
+	}
+	log.Println(id)
 
 	if err := s.ListenAndServe(); err != nil {
 		log.Println("系统启动失败")
